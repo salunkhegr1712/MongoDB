@@ -1,0 +1,104 @@
+we use find function in order to make and do queries on the database and apply function on them
+
+in order to read all the data in the database just use the command
+
+db.collectionName.find() it will work as same as select *from TableName;
+
+so for applying queries
+
+db.collectionName.find({field-Name-which-you're-searching : value})
+
+> db.movies.find({"name":"ghansham"})
+{ "_id" : ObjectId("62f723df016512cc2432555b"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72872016512cc2432555d"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72976016512cc2432555e"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f7298e016512cc2432555f"), "name" : "ghansham", "branch" : "CSE" }
+
+> db.shop.find()
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25 }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35 }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50 }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30 }
+>
+
+queries with use of perticular operators
+
+# here we used greater than operator
+
+> db.shop.find({price:{$gt:30}});
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35 }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50 }
+
+# here we used greater than or equal to operator
+
+> db.shop.find({price:{$gte:30}});
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35 }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50 }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30 }
+
+
+# Projection
+projection is field wherw you can specify which field you want to see in output
+
+
+id is came by default  if you dont want it then specify "_id":0
+
+> db.shop.find({price:{$gte:30}},{"_id":0,"name":1,"price":1});
+{ "name" : "grapes", "price" : 35 }
+{ "name" : "apple", "price" : 50 }
+{ "name" : "pineapple", "price" : 30 }
+
+# update database
+
+the updateOne will update only the first field not all fields
+for update we have to specify the new values and for that we will use the $set operators
+
+> db.shop.updateOne({price:{$gte:30}},{$set:{"stocks":25}});
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.shop.find()
+
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25 }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25 }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50 }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30 }
+
+# another example of updateOne
+
+> db.shop.updateOne({price:{$lt:35}},{$set:{"stocks":25}});
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.shop.find()
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25 }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25 }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50 }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30 }
+
+
+# update using updateMany
+it will all possible entries which came out of the DB
+it works like
+db.NameOFcollection.updateMany(which all to update,upto to what)
+
+> db.shop.updateMany({price:{$lte:50}},{$set:{"availibility":"yes"}});
+{ "acknowledged" : true, "matchedCount" : 4, "modifiedCount" : 4 }
+
+> db.shop.find()
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72ed9016512cc24325562"), "name" : "apple", "price" : 50, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30, "availibility" : "yes" }
+
+# delete
+
+functions:
+
+db.movies.deleteOne(QUERY)
+db.movies.deleteMany(query)
+> db.shop.deleteOne({"stocks":20});
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.shop.find()
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30, "availibility" : "yes" }
+
+and such like that you can Perform such functions
