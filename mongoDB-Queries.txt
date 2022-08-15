@@ -1,3 +1,4 @@
+
 we use find function in order to make and do queries on the database and apply function on them
 
 in order to read all the data in the database just use the command
@@ -102,3 +103,78 @@ db.movies.deleteMany(query)
 { "_id" : ObjectId("62f72f42016512cc24325563"), "name" : "pineapple", "price" : 30, "availibility" : "yes" }
 
 and such like that you can Perform such functions
+
+# lets uses  some of the logical operator
+# using or ($or) statement
+
+
+> db.movies.find( { $or: [ { "name":"ghansham" }, { "branch": "CSE" } ] } )
+{ "_id" : ObjectId("62f72872016512cc2432555d"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72976016512cc2432555e"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f7298e016512cc2432555f"), "name" : "ghansham", "branch" : "CSE" }
+
+
+> db.movies.find( { $or: [ { "name":"ghansham" }, { "name": "CSE" } ] } )
+{ "_id" : ObjectId("62f72872016512cc2432555d"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72976016512cc2432555e"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f7298e016512cc2432555f"), "name" : "ghansham", "branch" : "CSE" }
+
+
+> db.movies.find( { $or: [ { "name":"ghansham" }, { "name": "adesh" } ] } )
+{ "_id" : ObjectId("62f723df016512cc2432555c"), "name" : "adesh", "branch" : "ME" }
+{ "_id" : ObjectId("62f72872016512cc2432555d"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72976016512cc2432555e"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f7298e016512cc2432555f"), "name" : "ghansham", "branch" : "CSE" }
+
+
+> db.movies.deleteOne( { $or: [ { "name":"ghansham" }, { "name": "adesh" } ] } )
+{ "acknowledged" : true, "deletedCount" : 1 }
+
+> db.movies.find( { $or: [ { "name":"ghansham" }, { "name": "adesh" } ] } )
+{ "_id" : ObjectId("62f72872016512cc2432555d"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f72976016512cc2432555e"), "name" : "ghansham", "branch" : "CSE" }
+{ "_id" : ObjectId("62f7298e016512cc2432555f"), "name" : "ghansham", "branch" : "CSE" }
+
+> db.shop.find({$or:[{name:"banana"},{name:"grapes"}]});
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25, "availibility" : "yes" }
+
+
+# using and ($and) operation
+
+> db.shop.find({$and: [ {"name":"banana"}, {price:20}]})
+{ "_id" : ObjectId("62f912534cb7ab220ee0188f"), "name" : "banana", "price" : 20, "stocks" : 40, "availibility" : "yes" }
+
+> db.shop.find({$and: [ {"name":"banana"}, {stocks:25}]})
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+
+> db.shop.find({$and: [ {"name":"banana"}, {stocks:{$gte:25}}]})
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f912534cb7ab220ee0188f"), "name" : "banana", "price" : 20, "stocks" : 40, "availibility" : "yes" }
+
+> db.shop.find({$and: [ {"availibility":"yes"}, {stocks:{$gte:20}}]})
+{ "_id" : ObjectId("62f72ed9016512cc24325560"), "name" : "banana", "price" : 25, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f72ed9016512cc24325561"), "name" : "grapes", "price" : 35, "stocks" : 25, "availibility" : "yes" }
+{ "_id" : ObjectId("62f912464cb7ab220ee0188e"), "name" : "banana", "price" : 30, "stocks" : 20, "availibility" : "yes" }
+{ "_id" : ObjectId("62f912534cb7ab220ee0188f"), "name" : "banana", "price" : 20, "stocks" : 40, "availibility" : "yes" }
+
+
+use the command
+d.dropDatabase() in order to delete that set of database but you must be currently using that database 
+> show dbs
+admin     0.000GB
+config    0.000GB
+ghansham  0.000GB
+local     0.000GB
+> use local
+switched to db local
+> show collections
+startup_log
+> db.drop
+db.dropAllRoles(  db.dropAllUsers(  db.dropDatabase(  db.dropRole(      db.dropUser(
+> db.dropDatabase()
+{ "dropped" : "local", "ok" : 1 }
+> show dbs
+admin     0.000GB
+config    0.000GB
+ghansham  0.000GB
